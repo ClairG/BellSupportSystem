@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Welcome to Bell Support";
+}
+
+<h2> Please select the operation to perform</h2>
+
+<div>
+    <button class="btn btn-default">@Html.ActionLink("Create a Ticket", "Index", "CreateTicket")</button>
+</div>
+<br />
+<div>
+    <button class="btn btn-default">@Html.ActionLink("View All Tickets", "Index", "FilterTicket")</button>
+</div>

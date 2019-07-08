@@ -1,0 +1,88 @@
+﻿@model ClairGeng.BellSupportSystem.WebApp.DomainModels.Ticket
+
+@{
+    ViewBag.Title = ClairGeng.BellSupportSystem.WebApp.Resources.LanguageText.CreatTicket;
+}
+
+<h2>@ClairGeng.BellSupportSystem.WebApp.Resources.LanguageText.CreatTicket</h2>
+
+<style type="text/css">
+    select {
+        width: 200px;
+    }
+</style>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#showDepartments').on('change', function () {
+            var departmentId = $('#showDepartments option:selected').val();
+            $.ajax({
+                type: 'GET',
+                data: { departmentId: departmentId},
+                url: '@Url.Action("loadEmployee","CreateTicket")',
+                success: function (result) {
+                    var e = '<option value = "-1">-------------------</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        e += '<option value = "' + result[i].Id + '">' + result[i].Id + '<text> - </text>' + result[i].Name + '</option > ';
+                    }
+                    $('#showEmployees').html(e);
+                }
+            }
+            );
+        })
+    });
+</script>
+<form method="post">
+    <table>
+        <tr>
+            <td>Check your Employee Id </td>
+        </tr>
+        <tr>
+            <td>@ClairGeng.BellSupportSystem.WebApp.Resources.LanguageText.Department</td>
+            <td>
+                <select id="showDepartments">
+                    <option value="-1">Select a Department</option>
+                    @foreach (var department in ViewBag.departments)
+                    {
+                        <option value="@department.Id">@department.Id <text>-</text> @department.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Employee Id</td>
+            <td>
+                <select id="showEmployees"></select>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+@using (Html.BeginForm("CreateTickets", "CreateTicket", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        <label>@ClairGeng.BellSupportSystem.WebApp.Resources.LanguageText.ProjectName</label>
+        <br />
+        @Html.TextBoxFor(m => Model.ProjectName)
+    </div>
+
+    <div class="form-group">
+        <label>@ClairGeng.BellSupportSystem.WebApp.Resources.LanguageText.RequestedBy</label>
+        <br />
+        @Html.TextBoxFor(m => Model.EmployeeId)
+        <br />
+        <text>Please enter an Id</text>
+    </div>
+    <div class="form-group">
+        <label>@ClairGeng.BellSupportSystem.WebApp.Resources.LanguageText.Description</label>
+        <br />
+        @Html.TextAreaFor(m => Model.Description)
+    </div>
+
+    <div>
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+}
